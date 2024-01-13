@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import axios from 'axios';
+import {useMutation} from '@tanstack/react-query';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {logUser} from '../api/authApis';
@@ -8,69 +10,73 @@ import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
 export const LoginScreen = (props: {navigation: any}) => {
-  const [loading, setLoading] = useState(false);
+  const logUserMutation = useMutation({
+    mutationKey: ['logUser'],
+    mutationFn: logUser,
+    onSuccess: data => {
+      handleSuccessLogIn(data.token);
+    },
+    onError(error) {
+      let errorMsg = 'Login failed';
+      if (axios.isAxiosError(error)) {
+        errorMsg = error.response?.data?.error ?? 'Login Failed';
+      }
+      setErrorMessage(errorMsg);
+    },
+  });
+
   const [mailText, setMailText] = useState('');
   const [passwordText, setPassword] = useState('');
-  const [mailErrorMsg, setMailErrorMsg] = useState('');
-  const [passwordErrorMsg, setPasswordErrorMsg] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const onPasswordChange = (text: string) => {
-    if (!loading) {
-      if (text.length > 0) setPasswordErrorMsg('');
-      setPassword(text);
-    }
+    if (errorMessage) setErrorMessage('');
+    setPassword(text);
   };
 
   const onMailChange = (text: string) => {
-    if (!loading) {
-      if (text.length > 0) setMailErrorMsg('');
-      setMailText(text);
-    }
+    if (errorMessage) setErrorMessage('');
+    setMailText(text);
   };
 
   const onPressSubmit = async () => {
+    let errorMsg = '';
     let allFieldsValid = true;
-    // api doesn't apply any validation on mail, so we will allow anything but empty mail
+
     if (mailText.length === 0) {
-      setMailErrorMsg('Email field is required');
+      errorMsg += 'Email is required - ';
       allFieldsValid = false;
     }
     // Server require 8 characters, UX wise it's better to check here if password meets the requirements
     // but what if the requirements change on server ? or what if an old user registerd with password <8 charachters before the requirements applied ?
     if (passwordText.length === 0) {
-      setPasswordErrorMsg('Password field is required');
+      errorMsg += 'Password is required';
       allFieldsValid = false;
     }
-    if (allFieldsValid) {
-      handleLogUser();
-    }
-  };
 
-  const handleLogUser = async () => {
-    setLoading(true);
-    const response = await logUser(mailText, passwordText);
-    setLoading(false);
-    if (response.success && response.adminData?.token) {
-      handleSuccessLogIn(response.adminData.token);
-    } else {
-      setMailErrorMsg(response.errorText || 'Something went wrong');
-      setPasswordErrorMsg(response.errorText || 'Something went wrong');
+    if (allFieldsValid) {
+      logUserMutation.mutate({email: mailText, password: passwordText});
     }
+    setErrorMessage(errorMsg);
   };
 
   const handleSuccessLogIn = (token: string | null) => {
     const {navigation} = props;
-    storeToken(token);
-    setAxiosToken(token);
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: 'MainStack',
-          state: {routes: [{name: 'Home'}]},
-        },
-      ],
-    });
+    if (token) {
+      storeToken(token);
+      setAxiosToken(token);
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'MainStack',
+            state: {routes: [{name: 'Home'}]},
+          },
+        ],
+      });
+    } else {
+      setErrorMessage('Something went wrong');
+    }
   };
 
   const onPressRegister = () => {
@@ -89,21 +95,27 @@ export const LoginScreen = (props: {navigation: any}) => {
         <LabeledInput
           label="Email"
           value={mailText}
-          editable={!loading}
+          editable={!logUserMutation.isPending}
           onChangeText={onMailChange}
         />
-        <Text style={styles.errorText}>{mailErrorMsg}</Text>
         <Spacer padding={8} />
         <LabeledInput
           secureText
           label="Passowrd"
-          editable={!loading}
+          editable={!logUserMutation.isPending}
           value={passwordText}
           onChangeText={onPasswordChange}
         />
-        <Text style={styles.errorText}>{passwordErrorMsg}</Text>
+        <Spacer padding={8} />
+        {errorMessage ? (
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        ) : null}
         <Spacer padding={36} />
-        <LargeButton label="Submit" onPress={onPressSubmit} loading={loading} />
+        <LargeButton
+          label="Submit"
+          onPress={onPressSubmit}
+          loading={logUserMutation.isPending}
+        />
         <Spacer padding={10} />
         <TouchableOpacity
           activeOpacity={0.7}
@@ -118,6 +130,6 @@ export const LoginScreen = (props: {navigation: any}) => {
 
 const styles = StyleSheet.create({
   topTextContainer: {alignItems: 'center', paddingVertical: moderateScale(40)},
-  errorText: {color: 'red', fontSize: scale(8)},
+  errorText: {color: 'red', fontSize: scale(12), fontWeight: 'bold'},
   registerButton: {alignSelf: 'flex-end'},
 });

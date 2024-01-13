@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {getToken} from './src/helpers/asyncStorageHelpers';
@@ -24,20 +25,23 @@ function App(): JSX.Element {
   }, []);
 
   const RootStack = createNativeStackNavigator();
+  const queryClient = new QueryClient();
 
   if (loading) {
     return <View />;
   }
 
   return (
-    <NavigationContainer>
-      <RootStack.Navigator
-        screenOptions={{headerShown: false}}
-        initialRouteName={isTokenAvailable ? 'MainStack' : 'AuthStack'}>
-        <RootStack.Screen name="AuthStack" component={AuthStackScreens} />
-        <RootStack.Screen name="MainStack" component={MainStackScreens} />
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <RootStack.Navigator
+          screenOptions={{headerShown: false}}
+          initialRouteName={isTokenAvailable ? 'MainStack' : 'AuthStack'}>
+          <RootStack.Screen name="AuthStack" component={AuthStackScreens} />
+          <RootStack.Screen name="MainStack" component={MainStackScreens} />
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 
