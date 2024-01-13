@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text} from 'react-native';
+import {View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -27,7 +27,7 @@ function App(): JSX.Element {
   const RootStack = createNativeStackNavigator();
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return <View />;
   }
 
   return (
