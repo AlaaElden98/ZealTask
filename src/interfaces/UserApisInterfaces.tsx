@@ -3,7 +3,8 @@ import {LocationInput} from './CommonInterfaces';
 export interface AddUpdateUserInput {
   name: string;
   email: string;
-  locations: LocationInput[];
+  locations?: LocationInput[];
+  userCurrentMail?: string;
 }
 
 export interface UserData {

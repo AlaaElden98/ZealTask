@@ -30,6 +30,11 @@ export const AddLocationScreen = (props: AddLocationScreenProps) => {
         userMail,
         location: {lat: latitudeText, lng: longitudeText},
       });
+    } else {
+      navigation.navigate('AddEditUser', {
+        isEditMode: false,
+        location: {lat: latitudeText, lng: longitudeText},
+      });
     }
   };
 

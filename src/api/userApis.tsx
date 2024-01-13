@@ -13,10 +13,9 @@ export const addUser = async (payload: AddUpdateUserInput) => {
 };
 
 export const updateUser = async (
-  payload: AddUpdateUserInput,
-  userCurrentMail: string,
+  input: AddUpdateUserInput,
 ): Promise<UserData> => {
-  const {email, name} = payload;
+  const {email, name, userCurrentMail} = input;
   const response = await axios.patch(`/user/${userCurrentMail}`, {email, name});
   return response.data;
 };
