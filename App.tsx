@@ -6,7 +6,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {getToken} from './src/helpers/asyncStorageHelpers';
 import {MainStackScreens} from './src/navigation/MainStack';
 import {AuthStackScreens} from './src/navigation/AuthStack';
-import {STACK_NAMES} from './src/constant/navigationConstants';
 import {setAxiosConfigurations, setAxiosToken} from './src/api/axiosConfig';
 
 function App(): JSX.Element {
@@ -34,17 +33,9 @@ function App(): JSX.Element {
     <NavigationContainer>
       <RootStack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={
-          isTokenAvailable ? STACK_NAMES.MainStack : STACK_NAMES.AuthStack
-        }>
-        <RootStack.Screen
-          name={STACK_NAMES.AuthStack}
-          component={AuthStackScreens}
-        />
-        <RootStack.Screen
-          name={STACK_NAMES.MainStack}
-          component={MainStackScreens}
-        />
+        initialRouteName={isTokenAvailable ? 'MainStack' : 'AuthStack'}>
+        <RootStack.Screen name="AuthStack" component={AuthStackScreens} />
+        <RootStack.Screen name="MainStack" component={MainStackScreens} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

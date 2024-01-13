@@ -6,7 +6,6 @@ import {setAxiosToken} from '../api/axiosConfig';
 import {storeToken} from '../helpers/asyncStorageHelpers';
 import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LabeledInput, LargeButton, Spacer} from '../components';
-import {SCREEN_NAMES, STACK_NAMES} from '../constant/navigationConstants';
 
 export const LoginScreen = (props: {navigation: any}) => {
   const [loading, setLoading] = useState(false);
@@ -67,8 +66,8 @@ export const LoginScreen = (props: {navigation: any}) => {
       index: 0,
       routes: [
         {
-          name: STACK_NAMES.MainStack,
-          state: {routes: [{name: SCREEN_NAMES.HomeScreen}]},
+          name: 'MainStack',
+          state: {routes: [{name: 'Home'}]},
         },
       ],
     });
@@ -76,7 +75,7 @@ export const LoginScreen = (props: {navigation: any}) => {
 
   const onPressRegister = () => {
     const {navigation} = props;
-    navigation.navigate(SCREEN_NAMES.RegisterScreen);
+    navigation.navigate('Register');
   };
 
   return (

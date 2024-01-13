@@ -3,7 +3,6 @@ import {View, Text, StyleSheet} from 'react-native';
 
 import {registerUser} from '../api/authApis';
 import {moderateScale, scale} from '../helpers/scaleHelpers';
-import {SCREEN_NAMES} from '../constant/navigationConstants';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
 export const RegisterScreen = (props: {navigation: any}) => {
@@ -49,7 +48,7 @@ export const RegisterScreen = (props: {navigation: any}) => {
     const response = await registerUser(mailText, passwordText, nameText);
     if (response.success) {
       resetState();
-      navigation.navigate(SCREEN_NAMES.LoginScreen);
+      navigation.navigate('Login');
     } else {
       response.errorText.includes('user')
         ? setMailErrorMsg(response.errorText)
