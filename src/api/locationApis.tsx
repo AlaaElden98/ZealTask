@@ -12,7 +12,7 @@ export const getLocationByMail = async (
   userMail: string,
 ): Promise<Array<Location>> => {
   const response = await axios.get(`/location/${userMail}`);
-  return response.data;
+  return response.data.locations;
 };
 
 export const addLocationByMail = async (
@@ -21,12 +21,12 @@ export const addLocationByMail = async (
 ) => await axios.post(`/user/${userMail}`, {input});
 
 export const updateLocationById = async (
-  locationId: string,
+  locationId: number,
   input: LocationInput,
 ) => {
   const {lat, lng} = input;
   return await axios.patch(`/user/${locationId}`, {lat, lng});
 };
 
-export const deleteLocationById = async (locationId: string) =>
+export const deleteLocationById = async (locationId: number) =>
   await axios.delete(`/location/${locationId}`);
