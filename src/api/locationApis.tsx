@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import {Location} from '../interfaces/LocationApisInterfaces';
 import {LocationInput} from '../interfaces/CommonInterfaces';
+import {AddLocationInput, Location} from '../interfaces/LocationApisInterfaces';
 
 export const getAllLocations = async (): Promise<Array<Location>> => {
   const res = await axios.get('/location');
@@ -15,17 +15,20 @@ export const getLocationByMail = async (
   return response.data.locations;
 };
 
-export const addLocationByMail = async (
-  userMail: string,
-  input: LocationInput,
-) => await axios.post(`/user/${userMail}`, {input});
+export const addLocationByMail = async ({
+  userMail,
+  location,
+}: AddLocationInput) => {
+  const {lat, lng} = location;
+  await axios.post(`/location/${userMail}`, {lat, lng});
+};
 
 export const updateLocationById = async (
   locationId: number,
   input: LocationInput,
 ) => {
   const {lat, lng} = input;
-  return await axios.patch(`/user/${locationId}`, {lat, lng});
+  return await axios.patch(`/location/${locationId}`, {lat, lng});
 };
 
 export const deleteLocationById = async (locationId: number) =>
