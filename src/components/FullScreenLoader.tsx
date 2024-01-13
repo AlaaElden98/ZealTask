@@ -6,7 +6,7 @@ import {View, ActivityIndicator, StyleSheet} from 'react-native';
 export const FullScreenLoader = (props: {visible: boolean}) => {
   const {visible} = props;
   return (
-    <Modal isVisible={visible} backdropOpacity={0}>
+    <Modal isVisible={visible} backdropOpacity={0} animationIn="flash">
       <View style={styles.cotainer}>
         <View style={styles.backgroundShadow} />
         <View style={styles.indicatorContainer}>

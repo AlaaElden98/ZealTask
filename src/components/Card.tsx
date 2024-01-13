@@ -7,7 +7,7 @@ import {moderateScale, scale} from '../helpers/scaleHelpers';
 
 interface CardProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   onPressDelete?: () => void;
   onPressEdit?: () => void;
   extendedStyle?: StyleProp<ViewStyle>;

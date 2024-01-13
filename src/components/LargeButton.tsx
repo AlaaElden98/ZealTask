@@ -1,6 +1,8 @@
 import React from 'react';
 import {
   Text,
+  StyleProp,
+  ViewStyle,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -11,20 +13,22 @@ import {moderateScale, scale} from '../helpers/scaleHelpers';
 interface LargeButtonProps {
   label: string;
   onPress: () => void;
-  loading: boolean;
+  loading?: boolean;
+  extendedStyles?: StyleProp<ViewStyle>;
 }
 
 export const LargeButton: React.FC<LargeButtonProps> = ({
   label,
   onPress,
   loading,
+  extendedStyles,
 }) => {
   return (
     <TouchableOpacity
       disabled={loading}
       onPress={onPress}
       activeOpacity={0.9}
-      style={styles.container}
+      style={[styles.container, extendedStyles]}
       hitSlop={styles.hitSlop}>
       {loading ? (
         <ActivityIndicator color="black" size="small" />
