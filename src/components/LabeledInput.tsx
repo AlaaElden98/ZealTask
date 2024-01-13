@@ -1,6 +1,13 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {moderateScale} from '../helpers/scaleHelpers';
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  KeyboardTypeOptions,
+} from 'react-native';
+
+import {moderateScale, scale} from '../helpers/scaleHelpers';
 
 interface LabeledInputProps {
   label: string;
@@ -9,6 +16,7 @@ interface LabeledInputProps {
   secureText?: boolean;
   value?: string;
   editable?: boolean;
+  keyboardType?: KeyboardTypeOptions;
 }
 
 export const LabeledInput: React.FC<LabeledInputProps> = ({
@@ -18,6 +26,7 @@ export const LabeledInput: React.FC<LabeledInputProps> = ({
   placeHolder,
   onChangeText,
   editable,
+  keyboardType = 'default',
 }) => {
   return (
     <View>
@@ -29,6 +38,7 @@ export const LabeledInput: React.FC<LabeledInputProps> = ({
           onChangeText={onChangeText}
           value={value}
           editable={editable}
+          keyboardType={keyboardType}
         />
       </View>
     </View>
@@ -37,13 +47,13 @@ export const LabeledInput: React.FC<LabeledInputProps> = ({
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginTop: 8,
     borderWidth: 1,
     borderRadius: 14,
-    paddingHorizontal: moderateScale(12),
     justifyContent: 'center',
+    marginTop: moderateScale(8),
+    paddingHorizontal: moderateScale(12),
   },
   label: {
-    fontSize: 10,
+    fontSize: scale(10),
   },
 });
