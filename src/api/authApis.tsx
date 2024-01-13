@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {AuthApiResponse} from '../interfaces/ApiResponsesInterfaces';
+import {AuthApiResponse} from '../interfaces/AuthApisInterfaces';
 
 export const registerUser = async (
   email: string,
@@ -11,7 +11,7 @@ export const registerUser = async (
   try {
     const response = await axios.post('/register', {email, password, name});
     result.success = true;
-    result.userData = response.data;
+    result.adminData = response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       result.errorText = error.response?.data;
@@ -25,7 +25,7 @@ export const logUser = async (email: string, password: string) => {
   try {
     const response = await axios.post('/login', {email, password});
     result.success = true;
-    result.userData = response.data;
+    result.adminData = response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       result.errorText = error.response?.data.error;

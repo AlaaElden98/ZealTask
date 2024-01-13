@@ -1,10 +1,10 @@
 export interface AuthApiResponse {
   success: boolean;
   errorText: string;
-  userData?: UserData;
+  adminData?: AdminData;
 }
 
-interface UserData {
+interface AdminData {
   admin: {
     email: string;
     name: string;

@@ -51,8 +51,8 @@ export const LoginScreen = (props: {navigation: any}) => {
     setLoading(true);
     const response = await logUser(mailText, passwordText);
     setLoading(false);
-    if (response.success && response.userData?.token) {
-      handleSuccessLogIn(response.userData.token);
+    if (response.success && response.adminData?.token) {
+      handleSuccessLogIn(response.adminData.token);
     } else {
       setMailErrorMsg(response.errorText || 'Something went wrong');
       setPasswordErrorMsg(response.errorText || 'Something went wrong');
