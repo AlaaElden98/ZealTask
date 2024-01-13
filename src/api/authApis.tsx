@@ -6,8 +6,7 @@ export const registerUser = async (props: {
   name: string;
 }) => {
   const {email, password, name} = props;
-  const response = await axios.post('/register', {email, password, name});
-  return response.data;
+  return await axios.post('/register', {email, password, name});
 };
 
 export const logUser = async ({
@@ -18,5 +17,6 @@ export const logUser = async ({
   password: string;
 }) => {
   const response = await axios.post('/login', {email, password});
-  return response.data;
+  const token: string = response.data.token;
+  return token;
 };

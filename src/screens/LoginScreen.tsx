@@ -10,20 +10,20 @@ import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
 export const LoginScreen = (props: {navigation: any}) => {
+  const [mailText, setMailText] = useState('');
+  const [passwordText, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const logUserMutation = useMutation({
     mutationKey: ['logUser'],
     mutationFn: logUser,
-    onSuccess: data => {
-      handleSuccessLogIn(data.token);
+    onSuccess: token => {
+      handleSuccessLogIn(token);
     },
     onError: error => {
       handleFailedLogIn(error);
     },
   });
-
-  const [mailText, setMailText] = useState('');
-  const [passwordText, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
   const onPasswordChange = (text: string) => {
     if (errorMessage) setErrorMessage('');
