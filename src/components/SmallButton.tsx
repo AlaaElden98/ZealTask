@@ -36,7 +36,7 @@ export const SmallButton: React.FC<SmallButtonProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 14,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: moderateScale(2),

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, StyleProp, ViewStyle} from 'react-native';
 
 import {Spacer} from './Spacer';
 import {SmallButton} from './SmallButton';
@@ -8,18 +8,19 @@ import {moderateScale, scale} from '../helpers/scaleHelpers';
 interface CardProps {
   title: string;
   subtitle: string;
-  onPressDelete: () => void;
+  onPressDelete?: () => void;
   onPressEdit?: () => void;
+  extendedStyle?: StyleProp<ViewStyle>;
 }
 
 export const Card: React.FC<CardProps> = props => {
-  const {title, subtitle, onPressDelete, onPressEdit} = props;
+  const {title, subtitle, onPressDelete, onPressEdit, extendedStyle} = props;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, extendedStyle]}>
       <View>
-        <Text style={styles.label}>{title}</Text>
-        <Text style={styles.label}>{subtitle}</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
       <View>
         {onPressEdit ? (
@@ -29,12 +30,16 @@ export const Card: React.FC<CardProps> = props => {
             extendedStyles={styles.editButton}
           />
         ) : null}
-        <Spacer padding={4} />
-        <SmallButton
-          label="Delete"
-          onPress={onPressDelete}
-          extendedStyles={styles.deleteButton}
-        />
+        {onPressDelete ? (
+          <>
+            <Spacer padding={4} />
+            <SmallButton
+              label="Delete"
+              onPress={onPressDelete}
+              extendedStyles={styles.deleteButton}
+            />
+          </>
+        ) : null}
       </View>
     </View>
   );
@@ -48,8 +53,11 @@ const styles = StyleSheet.create({
     padding: moderateScale(18),
     justifyContent: 'space-between',
   },
-  label: {
-    fontSize: scale(14),
+  title: {
+    fontSize: scale(18),
+  },
+  subtitle: {
+    fontSize: scale(12),
   },
   deleteButton: {backgroundColor: 'red'},
   editButton: {backgroundColor: 'gray'},
