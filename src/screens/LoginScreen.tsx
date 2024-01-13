@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import {useMutation} from '@tanstack/react-query';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
@@ -16,12 +16,8 @@ export const LoginScreen = (props: {navigation: any}) => {
     onSuccess: data => {
       handleSuccessLogIn(data.token);
     },
-    onError(error) {
-      let errorMsg = 'Login failed';
-      if (axios.isAxiosError(error)) {
-        errorMsg = error.response?.data?.error ?? 'Login Failed';
-      }
-      setErrorMessage(errorMsg);
+    onError: error => {
+      handleFailedLogIn(error);
     },
   });
 
@@ -41,42 +37,36 @@ export const LoginScreen = (props: {navigation: any}) => {
 
   const onPressSubmit = async () => {
     let errorMsg = '';
-    let allFieldsValid = true;
-
     if (mailText.length === 0) {
       errorMsg += 'Email is required - ';
-      allFieldsValid = false;
     }
-    // Server require 8 characters, UX wise it's better to check here if password meets the requirements
-    // but what if the requirements change on server ? or what if an old user registerd with password <8 charachters before the requirements applied ?
+    // Server require 8 characters on registeration, UX wise it's better to check here if password meets the requirements
+    // but what if an old user registerd with password <8 charachters before the requirements applied ? what if the requirements change on server ?
     if (passwordText.length === 0) {
       errorMsg += 'Password is required';
-      allFieldsValid = false;
     }
 
-    if (allFieldsValid) {
+    if (!errorMessage) {
       logUserMutation.mutate({email: mailText, password: passwordText});
-    }
-    setErrorMessage(errorMsg);
+    } else setErrorMessage(errorMsg);
   };
 
   const handleSuccessLogIn = (token: string | null) => {
     const {navigation} = props;
-    if (token) {
-      storeToken(token);
-      setAxiosToken(token);
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'MainStack',
-            state: {routes: [{name: 'Home'}]},
-          },
-        ],
-      });
-    } else {
-      setErrorMessage('Something went wrong');
+    storeToken(token);
+    setAxiosToken(token);
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'MainStack', state: {routes: [{name: 'Home'}]}}],
+    });
+  };
+
+  const handleFailedLogIn = (error: Error | AxiosError<any, any>) => {
+    let errorMsg = 'Login failed';
+    if (axios.isAxiosError(error)) {
+      errorMsg = error.response?.data?.error ?? 'Login Failed';
     }
+    setErrorMessage(errorMsg);
   };
 
   const onPressRegister = () => {

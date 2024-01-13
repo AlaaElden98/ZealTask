@@ -1,23 +1,13 @@
 import axios from 'axios';
 
-import {AuthApiResponse} from '../interfaces/AuthApisInterfaces';
-
-export const registerUser = async (
-  email: string,
-  password: string,
-  name: string,
-) => {
-  const result: AuthApiResponse = {success: false, errorText: ''};
-  try {
-    const response = await axios.post('/register', {email, password, name});
-    result.success = true;
-    result.adminData = response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      result.errorText = error.response?.data;
-    }
-  }
-  return result;
+export const registerUser = async (props: {
+  email: string;
+  password: string;
+  name: string;
+}) => {
+  const {email, password, name} = props;
+  const response = await axios.post('/register', {email, password, name});
+  return response.data;
 };
 
 export const logUser = async ({

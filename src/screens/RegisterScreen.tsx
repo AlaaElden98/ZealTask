@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import axios, {AxiosError} from 'axios';
+import {useMutation} from '@tanstack/react-query';
 import {View, Text, StyleSheet} from 'react-native';
 
 import {registerUser} from '../api/authApis';
@@ -6,63 +8,67 @@ import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
 export const RegisterScreen = (props: {navigation: any}) => {
-  const [loading, setLoading] = useState(false);
   const [nameText, setNameText] = useState('');
   const [mailText, setMailText] = useState('');
   const [passwordText, setPassword] = useState('');
-  const [mailErrorMsg, setMailErrorMsg] = useState('');
-  const [passwordErrorMsg, setPasswordErrorMsg] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const registerUserMutation = useMutation({
+    mutationKey: ['registerUser'],
+    mutationFn: registerUser,
+    onSuccess: () => {
+      handleSuccessRegister();
+    },
+    onError: error => {
+      handleFailedRegister(error);
+    },
+  });
 
   const onPasswordChange = (text: string) => {
-    if (!loading) {
-      if (text.length > 0) setPasswordErrorMsg('');
-      setPassword(text);
-    }
+    if (errorMessage) setErrorMessage('');
+    setPassword(text);
   };
 
   const onMailChange = (text: string) => {
-    if (!loading) {
-      if (text.length > 0) setMailErrorMsg('');
-      setMailText(text);
-    }
+    if (errorMessage) setErrorMessage('');
+    setMailText(text);
   };
 
   const onPressSubmit = async () => {
-    let allFieldsValid = true;
+    let errorMsg = '';
     if (mailText.length === 0) {
-      setMailErrorMsg('Email field is required');
-      allFieldsValid = false;
+      errorMsg += 'Email is required - ';
     }
-    if (passwordText.length === 0) {
-      setPasswordErrorMsg('Password field is required');
-      allFieldsValid = false;
+    if (passwordText.length < 8) {
+      errorMsg += 'Password must be 8 or more';
     }
-    if (allFieldsValid) {
-      handleRegisterUser();
-    }
+    if (!errorMessage) {
+      registerUserMutation.mutate({
+        name: nameText,
+        email: mailText,
+        password: passwordText,
+      });
+    } else setErrorMessage(errorMsg);
   };
 
-  const handleRegisterUser = async () => {
+  const handleSuccessRegister = () => {
     const {navigation} = props;
-    setLoading(true);
-    const response = await registerUser(mailText, passwordText, nameText);
-    if (response.success) {
-      resetState();
-      navigation.navigate('Login');
-    } else {
-      response.errorText.includes('user')
-        ? setMailErrorMsg(response.errorText)
-        : setPasswordErrorMsg(response.errorText);
+    resetState();
+    navigation.navigate('Login');
+  };
+
+  const handleFailedRegister = (error: Error | AxiosError<any, any>) => {
+    let errorMsg = 'Register failed';
+    if (axios.isAxiosError(error)) {
+      errorMsg = error.response?.data?.error ?? 'Register Failed';
     }
-    setLoading(false);
+    setErrorMessage(errorMsg);
   };
 
   const resetState = () => {
     setMailText('');
     setNameText('');
     setPassword('');
-    setMailErrorMsg('');
-    setPasswordErrorMsg('');
   };
 
   return (
@@ -76,33 +82,34 @@ export const RegisterScreen = (props: {navigation: any}) => {
         <LabeledInput
           label="Name"
           value={nameText}
-          editable={!loading}
+          editable={!registerUserMutation.isPending}
           onChangeText={setNameText}
         />
         <Spacer padding={8} />
         <LabeledInput
           label="Email"
           value={mailText}
-          editable={!loading}
+          editable={!registerUserMutation.isPending}
           onChangeText={onMailChange}
         />
-        <Text style={styles.errorText}>{mailErrorMsg}</Text>
         <Spacer padding={8} />
         <LabeledInput
           secureText
           label="Passowrd"
-          editable={!loading}
+          editable={!registerUserMutation.isPending}
           value={passwordText}
           onChangeText={onPasswordChange}
         />
-        <Text style={styles.errorText}>{passwordErrorMsg}</Text>
+        {errorMessage ? (
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        ) : null}
         <Spacer padding={36} />
         <LargeButton
           label="Register"
           onPress={onPressSubmit}
-          loading={loading}
+          loading={registerUserMutation.isPending}
         />
-        {loading ? (
+        {registerUserMutation.isPending ? (
           <Text>*You will be directed to Login in few seconds</Text>
         ) : null}
       </View>
@@ -112,5 +119,5 @@ export const RegisterScreen = (props: {navigation: any}) => {
 
 const styles = StyleSheet.create({
   topTextContainer: {alignItems: 'center', paddingVertical: moderateScale(40)},
-  errorText: {color: 'red', fontSize: scale(8)},
+  errorText: {color: 'red', fontSize: scale(12), fontWeight: 'bold'},
 });
