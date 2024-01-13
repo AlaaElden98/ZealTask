@@ -10,6 +10,7 @@ import {
   SmallButton,
   LabeledInput,
 } from '../components';
+import {queryKeys} from '../constants/queryKeys';
 import {addUser, updateUser} from '../api/userApis';
 import {moderateScale} from '../helpers/scaleHelpers';
 import {AddEditUserScreenProps} from '../navigation/types';
@@ -30,7 +31,7 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
     mutationKey: ['addNewUser'],
     mutationFn: addUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['users']});
+      queryClient.invalidateQueries({queryKey: [queryKeys.users]});
       navigation.goBack();
     },
   });
@@ -39,8 +40,8 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
     mutationKey: ['updateUser'],
     mutationFn: updateUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['users']});
-      queryClient.invalidateQueries({queryKey: ['allLocations']});
+      queryClient.invalidateQueries({queryKey: [queryKeys.allLocations]});
+      queryClient.invalidateQueries({queryKey: [queryKeys.users]});
       navigation.goBack();
     },
   });

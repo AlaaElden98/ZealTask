@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
+import {queryKeys} from '../constants/queryKeys';
 import {moderateScale} from '../helpers/scaleHelpers';
 import {addLocationByMail} from '../api/locationApis';
 import {AddLocationScreenProps} from '../navigation/types';
@@ -19,7 +20,7 @@ export const AddLocationScreen = (props: AddLocationScreenProps) => {
     mutationKey: ['addNewLocation'],
     mutationFn: addLocationByMail,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['userLocations']});
+      queryClient.invalidateQueries({queryKey: [queryKeys.userLocations]});
       navigation.goBack();
     },
   });

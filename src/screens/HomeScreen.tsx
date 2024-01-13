@@ -9,6 +9,7 @@ import {
   LargeButton,
   FullScreenLoader,
 } from '../components';
+import {queryKeys} from '../constants/queryKeys';
 import {getAllLocations} from '../api/locationApis';
 import {HomeScreenProps} from '../navigation/types';
 import {deleteUser, getUsers} from '../api/userApis';
@@ -17,12 +18,12 @@ import {UserData} from '../interfaces/UserApisInterfaces';
 
 export const HomeScreen = (props: HomeScreenProps) => {
   const locationsQuery = useQuery({
-    queryKey: ['locations'],
+    queryKey: [queryKeys.allLocations],
     queryFn: getAllLocations,
   });
 
   const usersQuery = useQuery({
-    queryKey: ['users'],
+    queryKey: [queryKeys.users],
     queryFn: getUsers,
   });
 

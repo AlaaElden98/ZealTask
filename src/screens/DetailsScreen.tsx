@@ -9,6 +9,7 @@ import {
   SmallButton,
   FullScreenLoader,
 } from '../components';
+import {queryKeys} from '../constants/queryKeys';
 import {moderateScale} from '../helpers/scaleHelpers';
 import {DetailsScreenProps} from '../navigation/types';
 import {Location} from '../interfaces/LocationApisInterfaces';
@@ -18,7 +19,7 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
   const {userData} = props.route.params;
 
   const userLocationsQuery = useQuery({
-    queryKey: ['userLocations', userData.email],
+    queryKey: [queryKeys.userLocations, userData.email],
     queryFn: () => getLocationByMail(userData.email),
   });
 
