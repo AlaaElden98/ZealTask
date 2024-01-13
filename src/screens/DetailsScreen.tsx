@@ -40,7 +40,7 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
 
   const onPressAddLocation = () => {
     const {navigation} = props;
-    navigation.navigate('AddLocation');
+    navigation.navigate('AddLocation', {userMail: userData.email});
   };
 
   const checkIsLoading = () =>
@@ -80,12 +80,14 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
         ItemSeparatorComponent={renderSpacer}
         renderItem={({item}) => (
           <Card
+            key={item.id.toString()}
             title={item.id.toString()}
             subtitle={`Lat: ${item.lat}\nLon: ${item.lng}`}
             onPressDelete={() => onPressDelete(item)}
           />
         )}
         ListFooterComponent={renderSpacer}
+        keyExtractor={item => item.id.toString()}
       />
     </View>
   );

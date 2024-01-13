@@ -70,7 +70,6 @@ export const HomeScreen = (props: HomeScreenProps) => {
       <FlatList
         data={usersQuery.data}
         style={{marginTop: moderateScale(10)}}
-        ListFooterComponent={renderSpacer}
         ListHeaderComponent={renderSpacer}
         renderItem={({item}) => {
           return (
@@ -78,6 +77,7 @@ export const HomeScreen = (props: HomeScreenProps) => {
               onPress={() => onPressUser(item)}
               activeOpacity={1}>
               <Card
+                key={item.id.toString()}
                 title={item.name}
                 subtitle={item.email}
                 onPressDelete={() => onPressDelete(item)}
@@ -87,6 +87,8 @@ export const HomeScreen = (props: HomeScreenProps) => {
           );
         }}
         ItemSeparatorComponent={renderSpacer}
+        ListFooterComponent={renderSpacer}
+        keyExtractor={item => item.id.toString()}
       />
     </View>
   );
