@@ -9,10 +9,13 @@ React Native task for Zeal interview process. Check the [Task repo](https://gith
 ### Key Features
 - **Admin Registration:** Allows users to sign up as Admin.
 - **Admin Login:** Enables existing admins to log in.
+- **Persisted Login** User will login once, then will be logged in automatically
 - **Users Management:** Admins can add, update, or delete users profiles.
 - **User Location Management:** Monitor full details of a specific user, add or delete theier locations
 - **Friendly UX:** Show feeback to user on loading, newtwork request failure, etc..
-  
+
+https://github.com/AlaaElden98/ZealTask/assets/34111697/90a50136-b5d7-421d-9c0c-6f93c2f50435
+
 ## Technologies Used
 - React Native
 - TypeScript
