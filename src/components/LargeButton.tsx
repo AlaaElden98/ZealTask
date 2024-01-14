@@ -48,12 +48,11 @@ export const LargeButton: React.FC<LargeButtonProps> = ({
 const getStyles = (isDisabled: boolean | undefined) =>
   StyleSheet.create({
     container: {
-      borderWidth: 0.5,
       borderRadius: 14,
       alignItems: 'center',
       justifyContent: 'center',
       padding: moderateScale(14),
-      backgroundColor: isDisabled ? 'gray' : 'transparent',
+      backgroundColor: isDisabled ? 'gray' : 'green',
     },
     hitSlop: {
       top: 10,
@@ -62,7 +61,7 @@ const getStyles = (isDisabled: boolean | undefined) =>
       bottom: 10,
     },
     label: {
-      color: 'black',
+      color: isDisabled ? 'black' : 'white',
       fontSize: scale(14),
     },
   });

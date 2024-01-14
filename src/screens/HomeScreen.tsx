@@ -126,8 +126,6 @@ const styles = StyleSheet.create({
   },
   title: {fontSize: scale(18), color: 'black', fontWeight: 'bold'},
   button: {
-    borderWidth: 0,
-    backgroundColor: 'green',
     marginTop: moderateScale(10),
     marginBottom: moderateScale(20),
   },
