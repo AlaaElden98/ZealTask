@@ -13,8 +13,8 @@ import {queryKeys} from '../constants/queryKeys';
 import {getAllLocations} from '../api/locationApis';
 import {HomeScreenProps} from '../navigation/types';
 import {deleteUser, getUsers} from '../api/userApis';
-import {moderateScale} from '../helpers/scaleHelpers';
 import {UserData} from '../interfaces/UserApisInterfaces';
+import {moderateScale, scale} from '../helpers/scaleHelpers';
 
 export const HomeScreen = (props: HomeScreenProps) => {
   const locationsQuery = useQuery({
@@ -28,7 +28,7 @@ export const HomeScreen = (props: HomeScreenProps) => {
   });
 
   const deleteUserMutation = useMutation({
-    mutationKey: ['deleteUser'],
+    mutationKey: ['deleteUserMutation'],
     mutationFn: deleteUser,
     onSuccess: () => {
       refetchQueries();
@@ -72,13 +72,20 @@ export const HomeScreen = (props: HomeScreenProps) => {
     );
   }
 
+  const getNumberOfLocations = (userId: number) => {
+    const userLocations = locationsQuery.data?.filter(
+      location => location.userId === userId,
+    ).length;
+    return `${userLocations} Locations`;
+  };
+
   return (
     <View style={styles.container}>
       <FullScreenLoader visible={checkIsLoading()} />
       <Spacer padding={6} />
-      <Text># Locations {locationsQuery.data?.length}</Text>
+      <Text style={styles.title}>{locationsQuery.data?.length} Locations</Text>
       <Spacer padding={4} />
-      <Text># Users {usersQuery.data?.length}</Text>
+      <Text style={styles.title}>{usersQuery.data?.length} Users</Text>
       <FlatList
         data={usersQuery.data}
         style={{marginTop: moderateScale(10)}}
@@ -92,6 +99,7 @@ export const HomeScreen = (props: HomeScreenProps) => {
                 key={item.id.toString()}
                 title={item.name}
                 subtitle={item.email}
+                extraInfo={getNumberOfLocations(item.id)}
                 onPressDelete={() => onPressDelete(item)}
                 onPressEdit={() => onPressEdit(item)}
               />
@@ -120,4 +128,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#eeeeee',
     paddingHorizontal: moderateScale(14),
   },
+  title: {fontSize: scale(18), color: 'black', fontWeight: 'bold'},
 });

@@ -11,16 +11,25 @@ interface CardProps {
   onPressDelete?: () => void;
   onPressEdit?: () => void;
   extendedStyle?: StyleProp<ViewStyle>;
+  extraInfo?: string;
 }
 
 export const Card: React.FC<CardProps> = props => {
-  const {title, subtitle, onPressDelete, onPressEdit, extendedStyle} = props;
+  const {
+    title,
+    subtitle,
+    extraInfo,
+    onPressEdit,
+    onPressDelete,
+    extendedStyle,
+  } = props;
 
   return (
     <View style={[styles.container, extendedStyle]}>
       <View>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
+        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+        {extraInfo ? <Text style={styles.subtitle}>{extraInfo}</Text> : null}
       </View>
       <View>
         {onPressEdit ? (
@@ -55,6 +64,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: scale(18),
+    color: '#1a1a1a',
+    fontWeight: 'bold',
   },
   subtitle: {
     fontSize: scale(12),
