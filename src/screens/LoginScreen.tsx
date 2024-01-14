@@ -1,7 +1,13 @@
 import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import axios, {AxiosError} from 'axios';
 import {useMutation} from '@tanstack/react-query';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {logUser} from '../api/authApis';
 import {useInput} from '../hooks/useInput';
@@ -37,23 +43,11 @@ export const LoginScreen = (props: LoginScreenProps) => {
     mailInput.onChangeText(text);
   };
 
-  const onPressSubmit = async () => {
-    let errorMsg = '';
-    if (mailInput.value.length === 0) {
-      errorMsg += 'Email is required - ';
-    }
-    // Server require 8 characters on registeration, UX wise it's better to check here if password meets the requirements
-    // but what if an old user registerd with password <8 charachters before the requirements applied ? what if the requirements change on server ?
-    if (passwordInput.value.length === 0) {
-      errorMsg += 'Password is required';
-    }
-
-    if (!errorMessage) {
-      logUserMutation.mutate({
-        email: mailInput.value,
-        password: passwordInput.value,
-      });
-    } else setErrorMessage(errorMsg);
+  const onPressSubmit = () => {
+    logUserMutation.mutate({
+      email: mailInput.value,
+      password: passwordInput.value,
+    });
   };
 
   const handleSuccessLogIn = (token: string | null) => {
@@ -80,11 +74,9 @@ export const LoginScreen = (props: LoginScreenProps) => {
   };
 
   return (
-    <View>
+    <ScrollView>
       <View style={styles.topTextContainer}>
-        <Text>Welcom Back.</Text>
-        <Spacer padding={10} />
-        <Text>Login</Text>
+        <Text style={styles.welcomeText}>Welcom Back</Text>
       </View>
       <View style={{paddingHorizontal: moderateScale(14)}}>
         <LabeledInput
@@ -105,9 +97,10 @@ export const LoginScreen = (props: LoginScreenProps) => {
         <Text style={styles.errorText}>{errorMessage}</Text>
         <Spacer padding={36} />
         <LargeButton
-          label="Submit"
+          label="Login"
           onPress={onPressSubmit}
           loading={logUserMutation.isPending}
+          disabled={!mailInput.value || !passwordInput.value}
         />
         <Spacer padding={10} />
         <TouchableOpacity
@@ -117,12 +110,13 @@ export const LoginScreen = (props: LoginScreenProps) => {
           <Text>Register</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   topTextContainer: {alignItems: 'center', paddingVertical: moderateScale(40)},
   errorText: {color: 'red', fontSize: scale(12), fontWeight: 'bold'},
-  registerButton: {alignSelf: 'flex-end'},
+  registerButton: {alignSelf: 'flex-end', marginBottom: moderateScale(10)},
+  welcomeText: {fontSize: scale(16), fontWeight: 'bold'},
 });

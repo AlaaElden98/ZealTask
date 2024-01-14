@@ -66,6 +66,7 @@ export const AddLocationScreen = (props: AddLocationScreenProps) => {
           label="Submit"
           onPress={onPressSubmit}
           loading={addNewLocation.isPending}
+          disabled={!longitudeInput.value || !latitudeInput.value}
         />
       </View>
     </View>

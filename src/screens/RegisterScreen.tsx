@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios, {AxiosError} from 'axios';
 import {useMutation} from '@tanstack/react-query';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 
 import {useInput} from '../hooks/useInput';
 import {registerUser} from '../api/authApis';
@@ -75,13 +75,8 @@ export const RegisterScreen = (props: RegisterScreenProps) => {
   };
 
   return (
-    <View>
-      <View style={styles.topTextContainer}>
-        <Text>Welcom Back.</Text>
-        <Spacer padding={10} />
-        <Text>Register</Text>
-      </View>
-      <View style={{paddingHorizontal: moderateScale(14)}}>
+    <ScrollView contentContainerStyle={{flex: 1}}>
+      <View style={styles.inputs}>
         <LabeledInput
           label="Name"
           value={nameInput.value}
@@ -104,21 +99,34 @@ export const RegisterScreen = (props: RegisterScreenProps) => {
           onChangeText={onPasswordChange}
         />
         <Text style={styles.errorText}>{errorMessage}</Text>
-        <Spacer padding={36} />
+      </View>
+      <View style={styles.buttonContainer}>
         <LargeButton
           label="Register"
           onPress={onPressSubmit}
           loading={registerUserMutation.isPending}
+          disabled={
+            !nameInput.value || !mailInput.value || !passwordInput.value
+          }
         />
         {registerUserMutation.isPending ? (
           <Text>*You will be directed to Login in few seconds</Text>
         ) : null}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  topTextContainer: {alignItems: 'center', paddingVertical: moderateScale(40)},
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: moderateScale(10),
+    paddingHorizontal: moderateScale(14),
+  },
+  inputs: {
+    paddingTop: moderateScale(30),
+    paddingHorizontal: moderateScale(14),
+  },
   errorText: {color: 'red', fontSize: scale(12), fontWeight: 'bold'},
 });

@@ -50,11 +50,6 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
 
   const onPressSubmit = () => {
     if (isEditMode) {
-      if (
-        userNameInput.value === userData?.name &&
-        emailInput.value === userData?.email
-      )
-        return;
       updateUserMutation.mutate({
         name: userNameInput.value,
         email: emailInput.value,
@@ -103,6 +98,10 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
     }
     return errorMessage;
   };
+
+  const getSubmitButtonState = () =>
+    (isEditMode && userData?.name === userNameInput.value) ||
+    (!isEditMode && (!emailInput.value || !userNameInput.value));
 
   const renderListHeader = () => (
     <View style={styles.Listheader}>
@@ -162,6 +161,7 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
         onPress={onPressSubmit}
         loading={addNewUser.isPending || updateUserMutation.isPending}
         extendedStyles={styles.buttonContainer}
+        disabled={getSubmitButtonState()}
       />
     </View>
   );
