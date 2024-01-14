@@ -3,15 +3,17 @@ import axios, {AxiosError} from 'axios';
 import {useMutation} from '@tanstack/react-query';
 import {View, Text, StyleSheet} from 'react-native';
 
+import {useInput} from '../hooks/useInput';
 import {registerUser} from '../api/authApis';
 import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
 export const RegisterScreen = (props: {navigation: any}) => {
-  const [nameText, setNameText] = useState('');
-  const [mailText, setMailText] = useState('');
-  const [passwordText, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const mailInput = useInput();
+  const nameInput = useInput();
+  const passwordInput = useInput();
 
   const registerUserMutation = useMutation({
     mutationKey: ['registerUserMutation'],
@@ -26,27 +28,27 @@ export const RegisterScreen = (props: {navigation: any}) => {
 
   const onPasswordChange = (text: string) => {
     if (errorMessage) setErrorMessage('');
-    setPassword(text);
+    passwordInput.onChangeText(text);
   };
 
   const onMailChange = (text: string) => {
     if (errorMessage) setErrorMessage('');
-    setMailText(text);
+    mailInput.onChangeText(text);
   };
 
   const onPressSubmit = async () => {
     let errorMsg = '';
-    if (mailText.length === 0) {
+    if (mailInput.value.length === 0) {
       errorMsg += 'Email is required - ';
     }
-    if (passwordText.length < 8) {
+    if (passwordInput.value.length < 8) {
       errorMsg += 'Password must be 8 or more';
     }
     if (!errorMessage) {
       registerUserMutation.mutate({
-        name: nameText,
-        email: mailText,
-        password: passwordText,
+        name: nameInput.value,
+        email: mailInput.value,
+        password: passwordInput.value,
       });
     } else setErrorMessage(errorMsg);
   };
@@ -66,9 +68,9 @@ export const RegisterScreen = (props: {navigation: any}) => {
   };
 
   const resetState = () => {
-    setMailText('');
-    setNameText('');
-    setPassword('');
+    mailInput.onChangeText('');
+    nameInput.onChangeText('');
+    passwordInput.onChangeText('');
   };
 
   return (
@@ -81,14 +83,14 @@ export const RegisterScreen = (props: {navigation: any}) => {
       <View style={{paddingHorizontal: moderateScale(14)}}>
         <LabeledInput
           label="Name"
-          value={nameText}
+          value={nameInput.value}
           editable={!registerUserMutation.isPending}
-          onChangeText={setNameText}
+          onChangeText={nameInput.onChangeText}
         />
         <Spacer padding={8} />
         <LabeledInput
           label="Email"
-          value={mailText}
+          value={mailInput.value}
           editable={!registerUserMutation.isPending}
           onChangeText={onMailChange}
         />
@@ -97,7 +99,7 @@ export const RegisterScreen = (props: {navigation: any}) => {
           secureText
           label="Passowrd"
           editable={!registerUserMutation.isPending}
-          value={passwordText}
+          value={passwordInput.value}
           onChangeText={onPasswordChange}
         />
         {errorMessage ? (

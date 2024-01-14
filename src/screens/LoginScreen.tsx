@@ -4,15 +4,16 @@ import {useMutation} from '@tanstack/react-query';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {logUser} from '../api/authApis';
+import {useInput} from '../hooks/useInput';
 import {setAxiosToken} from '../api/axiosConfig';
 import {storeToken} from '../helpers/asyncStorageHelpers';
 import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
 export const LoginScreen = (props: {navigation: any}) => {
-  const [mailText, setMailText] = useState('');
-  const [passwordText, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const mailInput = useInput();
+  const passwordInput = useInput();
 
   const logUserMutation = useMutation({
     mutationKey: ['logUserMutation'],
@@ -27,27 +28,30 @@ export const LoginScreen = (props: {navigation: any}) => {
 
   const onPasswordChange = (text: string) => {
     if (errorMessage) setErrorMessage('');
-    setPassword(text);
+    passwordInput.onChangeText(text);
   };
 
   const onMailChange = (text: string) => {
     if (errorMessage) setErrorMessage('');
-    setMailText(text);
+    mailInput.onChangeText(text);
   };
 
   const onPressSubmit = async () => {
     let errorMsg = '';
-    if (mailText.length === 0) {
+    if (mailInput.value.length === 0) {
       errorMsg += 'Email is required - ';
     }
     // Server require 8 characters on registeration, UX wise it's better to check here if password meets the requirements
     // but what if an old user registerd with password <8 charachters before the requirements applied ? what if the requirements change on server ?
-    if (passwordText.length === 0) {
+    if (passwordInput.value.length === 0) {
       errorMsg += 'Password is required';
     }
 
     if (!errorMessage) {
-      logUserMutation.mutate({email: mailText, password: passwordText});
+      logUserMutation.mutate({
+        email: mailInput.value,
+        password: passwordInput.value,
+      });
     } else setErrorMessage(errorMsg);
   };
 
@@ -84,7 +88,7 @@ export const LoginScreen = (props: {navigation: any}) => {
       <View style={{paddingHorizontal: moderateScale(14)}}>
         <LabeledInput
           label="Email"
-          value={mailText}
+          value={mailInput.value}
           editable={!logUserMutation.isPending}
           onChangeText={onMailChange}
         />
@@ -93,7 +97,7 @@ export const LoginScreen = (props: {navigation: any}) => {
           secureText
           label="Passowrd"
           editable={!logUserMutation.isPending}
-          value={passwordText}
+          value={passwordInput.value}
           onChangeText={onPasswordChange}
         />
         <Spacer padding={8} />

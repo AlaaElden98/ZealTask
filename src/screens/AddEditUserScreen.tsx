@@ -10,6 +10,7 @@ import {
   SmallButton,
   LabeledInput,
 } from '../components';
+import {useInput} from '../hooks/useInput';
 import {queryKeys} from '../constants/queryKeys';
 import {addUser, updateUser} from '../api/userApis';
 import {AddEditUserScreenProps} from '../navigation/types';
@@ -24,8 +25,9 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
   const queryClient = useQueryClient();
 
   const [newLocations, setNewLocations] = useState<Array<LocationInput>>([]);
-  const [emai, setEmail] = useState(fillInputs ? userData.email : '');
-  const [userName, setUserName] = useState(fillInputs ? userData.name : '');
+
+  const userNameInput = useInput(fillInputs ? userData.name : '');
+  const emailInput = useInput(fillInputs ? userData.email : '');
 
   const addNewUser = useMutation({
     mutationKey: ['addNewUserMutation'],
@@ -48,16 +50,20 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
 
   const onPressSubmit = () => {
     if (isEditMode) {
-      if (userName === userData?.name && emai === userData?.email) return;
+      if (
+        userNameInput.value === userData?.name &&
+        emailInput.value === userData?.email
+      )
+        return;
       updateUserMutation.mutate({
-        name: userName,
-        email: emai,
+        name: userNameInput.value,
+        email: emailInput.value,
         userCurrentMail: userData?.email,
       });
     } else {
       addNewUser.mutate({
-        name: userName,
-        email: emai,
+        name: userNameInput.value,
+        email: emailInput.value,
         locations: newLocations,
       });
     }
@@ -135,15 +141,15 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
       <Spacer padding={20} />
       <LabeledInput
         label="Name"
-        value={userName}
-        onChangeText={setUserName}
+        value={userNameInput.value}
+        onChangeText={userNameInput.onChangeText}
         editable={!addNewUser.isPending && !updateUserMutation.isPending}
       />
       <Spacer padding={15} />
       <LabeledInput
         label="Email"
-        value={emai}
-        onChangeText={setEmail}
+        value={emailInput.value}
+        onChangeText={emailInput.onChangeText}
         editable={!isEditMode && !addNewUser.isPending}
       />
       <Spacer padding={15} />

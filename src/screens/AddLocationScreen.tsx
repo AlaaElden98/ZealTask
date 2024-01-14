@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
+import {useInput} from '../hooks/useInput';
 import {queryKeys} from '../constants/queryKeys';
 import {moderateScale} from '../helpers/scaleHelpers';
 import {addLocationByMail} from '../api/locationApis';
+import {numbersOnlyRegax} from '../helpers/regaxHelpers';
 import {AddLocationScreenProps} from '../navigation/types';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
@@ -13,8 +15,9 @@ export const AddLocationScreen = (props: AddLocationScreenProps) => {
   const userMail = route.params?.userMail;
 
   const queryClient = useQueryClient();
-  const [latitudeText, setLatitudeText] = useState('');
-  const [longitudeText, setLongitudeText] = useState('');
+
+  const latitudeInput = useInput('', numbersOnlyRegax());
+  const longitudeInput = useInput('', numbersOnlyRegax());
 
   const addNewLocation = useMutation({
     mutationKey: ['addNewLocationMutation'],
@@ -30,12 +33,12 @@ export const AddLocationScreen = (props: AddLocationScreenProps) => {
     if (userMail) {
       addNewLocation.mutate({
         userMail,
-        location: {lat: latitudeText, lng: longitudeText},
+        location: {lat: latitudeInput.value, lng: longitudeInput.value},
       });
     } else {
       navigation.navigate('AddEditUser', {
         isEditMode: false,
-        location: {lat: latitudeText, lng: longitudeText},
+        location: {lat: latitudeInput.value, lng: longitudeInput.value},
       });
     }
   };
@@ -45,17 +48,17 @@ export const AddLocationScreen = (props: AddLocationScreenProps) => {
       <Spacer padding={20} />
       <LabeledInput
         label="Latitude"
-        value={latitudeText}
+        value={latitudeInput.value}
         keyboardType="number-pad"
-        onChangeText={setLatitudeText}
+        onChangeText={latitudeInput.onChangeText}
         editable={!addNewLocation.isPending}
       />
       <Spacer padding={15} />
       <LabeledInput
         label="Longitude"
-        value={longitudeText}
+        value={longitudeInput.value}
         keyboardType="number-pad"
-        onChangeText={setLongitudeText}
+        onChangeText={longitudeInput.onChangeText}
         editable={!addNewLocation.isPending}
       />
       <View style={styles.buttonContainer}>
