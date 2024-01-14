@@ -32,6 +32,7 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
     mutationFn: addUser,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: [queryKeys.users]});
+      queryClient.refetchQueries({queryKey: [queryKeys.allLocations]});
       navigation.goBack();
     },
   });
@@ -40,7 +41,6 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
     mutationKey: ['updateUserMutation'],
     mutationFn: updateUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: [queryKeys.allLocations]});
       queryClient.invalidateQueries({queryKey: [queryKeys.users]});
       navigation.goBack();
     },

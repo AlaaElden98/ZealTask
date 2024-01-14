@@ -1,6 +1,6 @@
 import React from 'react';
-import {useMutation, useQuery} from '@tanstack/react-query';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import {
   Card,
@@ -17,6 +17,7 @@ import {deleteLocationById, getLocationByMail} from '../api/locationApis';
 
 export const DetailsScreen = (props: DetailsScreenProps) => {
   const {userData} = props.route.params;
+  const queryClient = useQueryClient();
 
   const userLocationsQuery = useQuery({
     queryKey: [queryKeys.userLocations, userData.email],
@@ -24,7 +25,7 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
   });
 
   const deleteLocation = useMutation({
-    mutationKey: ['deleteLocation'],
+    mutationKey: ['deleteLocationMutation'],
     mutationFn: deleteLocationById,
     onSuccess: () => {
       refetchQueries();
@@ -33,6 +34,7 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
 
   const refetchQueries = () => {
     userLocationsQuery.refetch();
+    queryClient.invalidateQueries({queryKey: [queryKeys.allLocations]});
   };
 
   const onPressDelete = (locaion: Location) => {
@@ -73,7 +75,11 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
     <View style={{paddingHorizontal: moderateScale(14)}}>
       <FullScreenLoader visible={checkIsLoading()} />
       <Spacer padding={10} />
-      <Card title={userData.name} subtitle={userData.email} />
+      <Card
+        title={userData.name}
+        subtitle={userData.email}
+        extraInfo={`${userLocationsQuery.data?.length} Locations`}
+      />
       <FlatList
         data={userLocationsQuery.data}
         style={{marginTop: moderateScale(10)}}
@@ -83,7 +89,7 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
           <Card
             key={item.id.toString()}
             title={item.id.toString()}
-            subtitle={`Lat: ${item.lat}\nLon: ${item.lng}`}
+            subtitle={`Lat: ${item.lat}  Lon: ${item.lng}`}
             onPressDelete={() => onPressDelete(item)}
           />
         )}

@@ -21,6 +21,7 @@ export const AddLocationScreen = (props: AddLocationScreenProps) => {
     mutationFn: addLocationByMail,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: [queryKeys.userLocations]});
+      queryClient.invalidateQueries({queryKey: [queryKeys.allLocations]});
       navigation.goBack();
     },
   });
