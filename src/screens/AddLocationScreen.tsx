@@ -17,7 +17,7 @@ export const AddLocationScreen = (props: AddLocationScreenProps) => {
   const [longitudeText, setLongitudeText] = useState('');
 
   const addNewLocation = useMutation({
-    mutationKey: ['addNewLocation'],
+    mutationKey: ['addNewLocationMutation'],
     mutationFn: addLocationByMail,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: [queryKeys.userLocations]});

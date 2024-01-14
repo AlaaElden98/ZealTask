@@ -15,7 +15,7 @@ export const LoginScreen = (props: {navigation: any}) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const logUserMutation = useMutation({
-    mutationKey: ['logUser'],
+    mutationKey: ['logUserMutation'],
     mutationFn: logUser,
     onSuccess: token => {
       handleSuccessLogIn(token);

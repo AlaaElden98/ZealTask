@@ -28,7 +28,7 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
   const [userName, setUserName] = useState(fillInputs ? userData.name : '');
 
   const addNewUser = useMutation({
-    mutationKey: ['addNewUser'],
+    mutationKey: ['addNewUserMutation'],
     mutationFn: addUser,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: [queryKeys.users]});
@@ -37,7 +37,7 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
   });
 
   const updateUserMutation = useMutation({
-    mutationKey: ['updateUser'],
+    mutationKey: ['updateUserMutation'],
     mutationFn: updateUser,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: [queryKeys.allLocations]});

@@ -14,7 +14,7 @@ export const RegisterScreen = (props: {navigation: any}) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const registerUserMutation = useMutation({
-    mutationKey: ['registerUser'],
+    mutationKey: ['registerUserMutation'],
     mutationFn: registerUser,
     onSuccess: () => {
       handleSuccessRegister();
