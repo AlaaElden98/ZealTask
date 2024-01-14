@@ -79,6 +79,19 @@ export const HomeScreen = (props: HomeScreenProps) => {
     return `${userLocations} Locations`;
   };
 
+  const renderItem = ({item}: {item: UserData}) => (
+    <TouchableOpacity onPress={() => onPressUser(item)} activeOpacity={1}>
+      <Card
+        key={item.id.toString()}
+        title={item.name}
+        subtitle={item.email}
+        extraInfo={getNumberOfLocations(item.id)}
+        onPressDelete={() => onPressDelete(item)}
+        onPressEdit={() => onPressEdit(item)}
+      />
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
       <FullScreenLoader visible={checkIsLoading()} />
@@ -90,22 +103,7 @@ export const HomeScreen = (props: HomeScreenProps) => {
         data={usersQuery.data}
         style={{marginTop: moderateScale(10)}}
         ListHeaderComponent={renderSpacer}
-        renderItem={({item}) => {
-          return (
-            <TouchableOpacity
-              onPress={() => onPressUser(item)}
-              activeOpacity={1}>
-              <Card
-                key={item.id.toString()}
-                title={item.name}
-                subtitle={item.email}
-                extraInfo={getNumberOfLocations(item.id)}
-                onPressDelete={() => onPressDelete(item)}
-                onPressEdit={() => onPressEdit(item)}
-              />
-            </TouchableOpacity>
-          );
-        }}
+        renderItem={renderItem}
         ItemSeparatorComponent={renderSpacer}
         ListFooterComponent={renderSpacer}
         keyExtractor={item => item.id.toString()}

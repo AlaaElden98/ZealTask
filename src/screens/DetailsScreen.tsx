@@ -62,6 +62,15 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
     </View>
   );
 
+  const renderItem = ({item}: {item: Location}) => (
+    <Card
+      key={item.id.toString()}
+      title={item.id.toString()}
+      subtitle={`Lat: ${item.lat}  Lon: ${item.lng}`}
+      onPressDelete={() => onPressDelete(item)}
+    />
+  );
+
   if (userLocationsQuery.isError) {
     return (
       <ErrorHolder
@@ -85,14 +94,7 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
         style={{marginTop: moderateScale(10)}}
         ListHeaderComponent={renderListHeader}
         ItemSeparatorComponent={renderSpacer}
-        renderItem={({item}) => (
-          <Card
-            key={item.id.toString()}
-            title={item.id.toString()}
-            subtitle={`Lat: ${item.lat}  Lon: ${item.lng}`}
-            onPressDelete={() => onPressDelete(item)}
-          />
-        )}
+        renderItem={renderItem}
         ListFooterComponent={renderSpacer}
         keyExtractor={item => item.id.toString()}
       />
