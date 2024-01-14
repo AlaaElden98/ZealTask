@@ -4,6 +4,22 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {UserData} from '../interfaces/UserApisInterfaces';
 import {LocationInput} from '../interfaces/CommonInterfaces';
 
+export type AuthStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  MainStack: undefined;
+};
+
+export type LoginScreenProps = {
+  navigation: NativeStackNavigationProp<AuthStackParamList, 'Login'>;
+  route: RouteProp<AuthStackParamList, 'Login'>;
+};
+
+export type RegisterScreenProps = {
+  navigation: NativeStackNavigationProp<AuthStackParamList, 'Register'>;
+  route: RouteProp<AuthStackParamList, 'Register'>;
+};
+
 export type MainStackParamList = {
   Home: undefined;
   Details: {userData: UserData};

@@ -6,11 +6,12 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {logUser} from '../api/authApis';
 import {useInput} from '../hooks/useInput';
 import {setAxiosToken} from '../api/axiosConfig';
+import {LoginScreenProps} from '../navigation/types';
 import {storeToken} from '../helpers/asyncStorageHelpers';
 import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
-export const LoginScreen = (props: {navigation: any}) => {
+export const LoginScreen = (props: LoginScreenProps) => {
   const [errorMessage, setErrorMessage] = useState('');
   const mailInput = useInput();
   const passwordInput = useInput();
@@ -101,9 +102,7 @@ export const LoginScreen = (props: {navigation: any}) => {
           onChangeText={onPasswordChange}
         />
         <Spacer padding={8} />
-        {errorMessage ? (
-          <Text style={styles.errorText}>{errorMessage}</Text>
-        ) : null}
+        <Text style={styles.errorText}>{errorMessage}</Text>
         <Spacer padding={36} />
         <LargeButton
           label="Submit"

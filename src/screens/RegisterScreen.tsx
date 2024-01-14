@@ -5,10 +5,11 @@ import {View, Text, StyleSheet} from 'react-native';
 
 import {useInput} from '../hooks/useInput';
 import {registerUser} from '../api/authApis';
+import {RegisterScreenProps} from '../navigation/types';
 import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LabeledInput, LargeButton, Spacer} from '../components';
 
-export const RegisterScreen = (props: {navigation: any}) => {
+export const RegisterScreen = (props: RegisterScreenProps) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const mailInput = useInput();
@@ -102,9 +103,7 @@ export const RegisterScreen = (props: {navigation: any}) => {
           value={passwordInput.value}
           onChangeText={onPasswordChange}
         />
-        {errorMessage ? (
-          <Text style={styles.errorText}>{errorMessage}</Text>
-        ) : null}
+        <Text style={styles.errorText}>{errorMessage}</Text>
         <Spacer padding={36} />
         <LargeButton
           label="Register"
