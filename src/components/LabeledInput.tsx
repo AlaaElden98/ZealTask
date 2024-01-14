@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(12),
   },
   label: {
-    fontSize: scale(10),
+    fontSize: scale(14),
   },
 });

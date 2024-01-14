@@ -111,12 +111,10 @@ export const HomeScreen = (props: HomeScreenProps) => {
         keyExtractor={item => item.id.toString()}
       />
       <LargeButton
-        label="Add new user"
+        label="Add New User"
         onPress={onPressAddNewUser}
-        extendedStyles={{
-          marginBottom: moderateScale(10),
-          marginTop: moderateScale(10),
-        }}
+        extendedStyles={styles.button}
+        labelStyle={styles.buttonText}
       />
     </View>
   );
@@ -129,4 +127,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(14),
   },
   title: {fontSize: scale(18), color: 'black', fontWeight: 'bold'},
+  button: {
+    borderWidth: 0,
+    backgroundColor: 'green',
+    marginTop: moderateScale(10),
+    marginBottom: moderateScale(20),
+  },
+  buttonText: {color: 'white', fontSize: scale(14), fontWeight: 'bold'},
 });

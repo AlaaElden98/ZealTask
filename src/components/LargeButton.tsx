@@ -3,6 +3,7 @@ import {
   Text,
   StyleProp,
   ViewStyle,
+  TextStyle,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -15,12 +16,14 @@ interface LargeButtonProps {
   onPress: () => void;
   loading?: boolean;
   extendedStyles?: StyleProp<ViewStyle>;
+  labelStyle?: StyleProp<TextStyle>;
 }
 
 export const LargeButton: React.FC<LargeButtonProps> = ({
   label,
   onPress,
   loading,
+  labelStyle,
   extendedStyles,
 }) => {
   return (
@@ -33,7 +36,7 @@ export const LargeButton: React.FC<LargeButtonProps> = ({
       {loading ? (
         <ActivityIndicator color="black" size="small" />
       ) : (
-        <Text>{label}</Text>
+        <Text style={labelStyle}>{label}</Text>
       )}
     </TouchableOpacity>
   );

@@ -12,8 +12,8 @@ import {
 } from '../components';
 import {queryKeys} from '../constants/queryKeys';
 import {addUser, updateUser} from '../api/userApis';
-import {moderateScale} from '../helpers/scaleHelpers';
 import {AddEditUserScreenProps} from '../navigation/types';
+import {moderateScale, scale} from '../helpers/scaleHelpers';
 import {LocationInput} from '../interfaces/CommonInterfaces';
 
 export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
@@ -100,7 +100,9 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
 
   const renderListHeader = () => (
     <View style={styles.Listheader}>
-      <Text>Locations</Text>
+      <Text style={{fontSize: scale(14)}}>
+        Locations # {newLocations.length}
+      </Text>
       <SmallButton
         label="Add location"
         extendedStyles={styles.addLocationButton}
