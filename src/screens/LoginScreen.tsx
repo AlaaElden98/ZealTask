@@ -107,7 +107,7 @@ export const LoginScreen = (props: LoginScreenProps) => {
           activeOpacity={0.7}
           onPress={onPressRegister}
           style={styles.registerButton}>
-          <Text>Register</Text>
+          <Text style={{color: 'black'}}>Register</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -118,5 +118,5 @@ const styles = StyleSheet.create({
   topTextContainer: {alignItems: 'center', paddingVertical: moderateScale(40)},
   errorText: {color: 'red', fontSize: scale(12), fontWeight: 'bold'},
   registerButton: {alignSelf: 'flex-end', marginBottom: moderateScale(10)},
-  welcomeText: {fontSize: scale(16), fontWeight: 'bold'},
+  welcomeText: {fontSize: scale(16), fontWeight: 'bold', color: 'black'},
 });

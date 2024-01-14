@@ -110,7 +110,9 @@ export const RegisterScreen = (props: RegisterScreenProps) => {
           }
         />
         {registerUserMutation.isPending ? (
-          <Text>*You will be directed to Login in few seconds</Text>
+          <Text style={{color: 'black'}}>
+            *You will be directed to Login in few seconds
+          </Text>
         ) : null}
       </View>
     </ScrollView>

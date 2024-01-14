@@ -63,11 +63,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: scale(18),
     color: '#1a1a1a',
     fontWeight: 'bold',
+    fontSize: scale(18),
   },
   subtitle: {
+    color: '#1a1a1a',
     fontSize: scale(12),
   },
   deleteButton: {backgroundColor: 'red'},

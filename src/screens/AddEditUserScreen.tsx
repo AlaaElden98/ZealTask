@@ -105,7 +105,7 @@ export const AddEditUserScreen = (props: AddEditUserScreenProps) => {
 
   const renderListHeader = () => (
     <View style={styles.Listheader}>
-      <Text style={{fontSize: scale(14)}}>
+      <Text style={styles.locationsNumer}>
         Locations # {newLocations.length}
       </Text>
       <SmallButton
@@ -185,4 +185,5 @@ const styles = StyleSheet.create({
   addLocationButton: {
     backgroundColor: 'green',
   },
+  locationsNumer: {fontSize: scale(14), color: 'black'},
 });

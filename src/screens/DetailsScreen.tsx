@@ -53,7 +53,7 @@ export const DetailsScreen = (props: DetailsScreenProps) => {
 
   const renderListHeader = () => (
     <View style={styles.Listheader}>
-      <Text>Locations</Text>
+      <Text style={{color: 'black'}}>Locations</Text>
       <SmallButton
         label="Add location"
         extendedStyles={styles.addLocationButton}

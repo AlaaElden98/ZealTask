@@ -39,7 +39,7 @@ export const LargeButton: React.FC<LargeButtonProps> = ({
       {loading ? (
         <ActivityIndicator color="black" size="small" />
       ) : (
-        <Text style={labelStyle}>{label}</Text>
+        <Text style={[styles.label, labelStyle]}>{label}</Text>
       )}
     </TouchableOpacity>
   );
@@ -62,6 +62,7 @@ const getStyles = (isDisabled: boolean | undefined) =>
       bottom: 10,
     },
     label: {
+      color: 'black',
       fontSize: scale(14),
     },
   });
